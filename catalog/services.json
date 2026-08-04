@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "organization": "apostille-me",
+  "services": [
+    "apme-api",
+    "apme-web-mash",
+    "apme-web-leptos",
+    "apme-web-dioxus",
+    "apme-sync"
+  ]
+}

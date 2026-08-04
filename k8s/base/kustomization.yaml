@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - apme-api.yaml
+  - apme-web-mash.yaml
+  - apme-web-leptos.yaml
+  - apme-web-dioxus.yaml
+  - apme-sync.yaml

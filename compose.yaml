@@ -1,0 +1,87 @@
+name: apme
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: apme
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: local-only-change-me
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U postgres -d apme]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  apme-api:
+    image: ghcr.io/apostille-me/apme-api:0.1.0
+    environment:
+      BIND_ADDR: 0.0.0.0:8080
+      RUST_LOG: info,tower_http=info
+    ports:
+      - "8080:8080"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  apme-web-mash:
+    image: ghcr.io/apostille-me/apme-web-mash:0.1.0
+    environment:
+      BIND_ADDR: 0.0.0.0:8080
+      RUST_LOG: info,tower_http=info
+    ports:
+      - "8081:8080"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  apme-web-leptos:
+    image: ghcr.io/apostille-me/apme-web-leptos:0.1.0
+    environment:
+      BIND_ADDR: 0.0.0.0:8080
+      RUST_LOG: info,tower_http=info
+    ports:
+      - "8082:8080"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  apme-web-dioxus:
+    image: ghcr.io/apostille-me/apme-web-dioxus:0.1.0
+    environment:
+      BIND_ADDR: 0.0.0.0:8080
+      RUST_LOG: info,tower_http=info
+    ports:
+      - "8083:8080"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  apme-sync:
+    image: ghcr.io/apostille-me/apme-sync:0.1.0
+    environment:
+      BIND_ADDR: 0.0.0.0:8080
+      RUST_LOG: info,tower_http=info
+    ports:
+      - "8084:8080"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: [/tmp]
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  postgres-data: {}
