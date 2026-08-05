@@ -15,4 +15,4 @@ The long `apostille-me-infra` repository is a historical bootstrap alias. Its sm
 
 Use Zed for application dependencies. Retain infrastructure as a Git submodule only for an explicit editable-deployment, inventory, or legacy role. Do not resolve the same repository through both Zed and a gitlink in one composition.
 
-When a reviewed submodule is adopted, a root package/composition manifest allows `zed overtake --git-submodules` to preserve `.gitmodules`, the exact gitlink, and provenance.
+`zed overtake --git-submodules` adopts only initialized submodules that declare their own `.zpkg.toml`; it writes them into the root manifest and lockfile while retaining `.gitmodules` as a reversible transport mirror and recording exact gitlinks and provenance. Infrastructure submodules without a package manifest remain under Git authority.
