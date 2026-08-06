@@ -9,3 +9,7 @@
 
 cloudflare-worker/node_modules/
 cloudflare-worker/.wrangler/
+tmp
+temp
+tmp/worktrees
+temp/worktrees
