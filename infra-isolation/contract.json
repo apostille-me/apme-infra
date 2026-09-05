@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "githubOrg": "apostille-me",
+  "expectedState": "paused",
+  "mapping": {
+    "neonOrg": "org-rapid-bread-02790784",
+    "supabaseOrg": "mvnbaulmhiqvoyuqevkt",
+    "cloudflareDomain": null,
+    "slackChannel": "C0BR80ZDY3Z",
+    "gcpProject": "apostille-me",
+    "linearProject": "cc34a745-551a-4395-856b-d8dceffa2293"
+  },
+  "areas": [
+    {
+      "role": "canonical",
+      "vpcId": null,
+      "region": null,
+      "sourceSecurityGroup": null,
+      "workloadIdentity": null,
+      "credentialRef": null
+    },
+    {
+      "role": "auth",
+      "vpcId": null,
+      "region": null,
+      "sourceSecurityGroup": null,
+      "workloadIdentity": null,
+      "credentialRef": null
+    },
+    {
+      "role": "admin",
+      "vpcId": null,
+      "region": null,
+      "sourceSecurityGroup": null,
+      "workloadIdentity": null,
+      "credentialRef": null
+    }
+  ],
+  "projects": [
+    {
+      "provider": "neon",
+      "role": "canonical",
+      "projectId": "hidden-mouse-60355064",
+      "region": "us-east-1",
+      "endpointIds": null
+    },
+    {
+      "provider": "neon",
+      "role": "auth",
+      "projectId": "curly-waterfall-50900593",
+      "region": "us-east-1",
+      "endpointIds": null
+    },
+    {
+      "provider": "neon",
+      "role": "admin",
+      "projectId": "spring-moon-72159172",
+      "region": "us-east-1",
+      "endpointIds": null
+    },
+    {
+      "provider": "supabase",
+      "role": "canonical",
+      "projectId": "qcbzijdwvomzvkfghbfo",
+      "region": "us-east-2",
+      "endpointIds": null
+    },
+    {
+      "provider": "supabase",
+      "role": "auth",
+      "projectId": "tlmqnqxqvybutrlqgzui",
+      "region": "us-east-2",
+      "endpointIds": null
+    },
+    {
+      "provider": "supabase",
+      "role": "admin",
+      "projectId": null,
+      "region": null,
+      "endpointIds": null
+    }
+  ]
+}
