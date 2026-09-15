@@ -1,0 +1,8 @@
+schema_version = 1
+layout = "modules"
+modules_root = "modules"
+environments_root = "environments"
+
+# Provider-native roots remain canonical entry points for provider Git integrations.
+# They call inward to reusable modules rather than moving provider-owned roots.
+provider_native_roots = ["neon", "supabase", "cloudflare-worker"]

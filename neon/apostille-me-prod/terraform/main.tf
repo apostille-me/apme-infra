@@ -11,32 +11,12 @@ terraform {
 
 provider "neon" {} # NEON_API_KEY comes from ores-sops at reviewed plan/apply time; never commit it.
 
-resource "neon_project" "prod" {
-  name                     = "apostille-me-prod"
-  org_id                   = var.neon_org_id
-  region_id                = "aws-us-east-2"
-  default_branch_protected = true
+module "project" {
+  source = "../../../modules/neon-project"
 
-  branch {
-    name          = "production"
-    database_name = "canonical"
-    role_name     = "apostille_me_app"
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
-}
-
-resource "neon_role" "auth" {
-  project_id = neon_project.prod.id
-  branch_id  = neon_project.prod.default_branch_id
-  name       = "apostille_me_auth"
-}
-
-resource "neon_database" "auth" {
-  project_id = neon_project.prod.id
-  branch_id  = neon_project.prod.default_branch_id
-  name       = "auth"
-  owner_name = neon_role.auth.name
+  neon_org_id         = var.neon_org_id
+  project_name        = "apostille-me-prod"
+  region_id           = "aws-us-east-2"
+  canonical_role_name = "apostille_me_app"
+  auth_role_name      = "apostille_me_auth"
 }
