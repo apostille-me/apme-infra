@@ -34,7 +34,9 @@ pub fn validate_catalog_text(input: &str) -> Result<(), String> {
             .as_str()
             .ok_or_else(|| "catalog service identifiers must be strings".to_string())?;
         if !value.starts_with("apme-")
-            || !value.bytes().all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'-')
+            || !value
+                .bytes()
+                .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'-')
         {
             return Err("catalog service identifiers must be lowercase apme-* names".into());
         }
@@ -70,8 +72,12 @@ pub fn validate_manifest_text(input: &str) -> Result<(), String> {
 }
 
 fn collect_yaml_files(root: &Path, files: &mut Vec<PathBuf>) -> Result<(), String> {
-    let entries = fs::read_dir(root)
-        .map_err(|error| format!("cannot read Kubernetes source directory {}: {error}", root.display()))?;
+    let entries = fs::read_dir(root).map_err(|error| {
+        format!(
+            "cannot read Kubernetes source directory {}: {error}",
+            root.display()
+        )
+    })?;
     let mut entries = entries
         .collect::<Result<Vec<_>, _>>()
         .map_err(|error| format!("cannot enumerate Kubernetes files: {error}"))?;
@@ -82,13 +88,14 @@ fn collect_yaml_files(root: &Path, files: &mut Vec<PathBuf>) -> Result<(), Strin
             .map_err(|error| format!("cannot inspect {}: {error}", path.display()))?
             .file_type();
         if kind.is_symlink() {
-            return Err(format!("Kubernetes source includes a symlink: {}", path.display()));
+            return Err(format!(
+                "Kubernetes source includes a symlink: {}",
+                path.display()
+            ));
         }
         if kind.is_dir() {
             collect_yaml_files(&path, files)?;
-        } else if kind.is_file()
-            && path.extension().is_some_and(|ext| ext == "yaml")
-        {
+        } else if kind.is_file() && path.extension().is_some_and(|ext| ext == "yaml") {
             files.push(path);
         }
     }
@@ -153,17 +160,26 @@ mod tests {
     fn malformed_or_wrong_organization_catalog_fails_closed() {
         assert!(validate_catalog_text("{broken").is_err());
         assert!(validate_catalog_text("[]").is_err());
-        assert!(validate_catalog_text(&GOOD_CATALOG.replace("apostille-me", "another-org")).is_err());
-        assert!(validate_catalog_text(&GOOD_CATALOG.replace("schema_version\": 1", "schema_version\": 2")).is_err());
+        assert!(
+            validate_catalog_text(&GOOD_CATALOG.replace("apostille-me", "another-org")).is_err()
+        );
+        assert!(validate_catalog_text(
+            &GOOD_CATALOG.replace("schema_version\": 1", "schema_version\": 2")
+        )
+        .is_err());
     }
 
     #[test]
     fn refuses_duplicate_and_noncanonical_services() {
-        let duplicated = GOOD_CATALOG.replace("\"apme-api\", \"apme-sync\"", "\"apme-api\", \"apme-api\"");
+        let duplicated =
+            GOOD_CATALOG.replace("\"apme-api\", \"apme-sync\"", "\"apme-api\", \"apme-api\"");
         assert!(validate_catalog_text(&duplicated).is_err());
         for invalid in ["API", "apme_", "../secrets", "apme-A", ""] {
             let mutated = GOOD_CATALOG.replace("apme-sync", invalid);
-            assert!(validate_catalog_text(&mutated).is_err(), "accepted {invalid:?}");
+            assert!(
+                validate_catalog_text(&mutated).is_err(),
+                "accepted {invalid:?}"
+            );
         }
     }
 
