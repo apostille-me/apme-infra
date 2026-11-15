@@ -1,0 +1,11 @@
+[package]
+name = "apme-infra-contract-check"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.82"
+publish = false
+license = "MIT"
+description = "Credential-free Rust validation of the Apostille Me infrastructure source contracts"
+
+[dependencies]
+serde_json = "1"
