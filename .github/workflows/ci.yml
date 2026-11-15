@@ -18,15 +18,13 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - name: Validate JSON and shell
+      - name: Rust formatting and lint
         run: |
-          python3 -m json.tool catalog/services.json >/dev/null
+          cargo fmt --manifest-path tools/infra-contract-check/Cargo.toml --all --check
+          cargo clippy --manifest-path tools/infra-contract-check/Cargo.toml --all-targets -- -D warnings
+      - name: Run Rust contract regression tests
+        run: cargo test --manifest-path tools/infra-contract-check/Cargo.toml --all-targets
+      - name: Validate infrastructure source with Rust
+        run: |
+          cargo run --manifest-path tools/infra-contract-check/Cargo.toml -- --root .
           bash -n scripts/*.sh
-      - name: Validate Kubernetes resources
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          for path in Path('k8s').rglob('*.yaml'):
-              text = path.read_text()
-              assert 'apiVersion:' in text and 'kind:' in text, path
-          PY
