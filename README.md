@@ -51,3 +51,12 @@ for the canonical/auth/admin infrastructure contract and adversarial tests.
 The dedicated GitHub Actions check is offline; live isolation acceptance requires
 fresh provider/AWS evidence and explicitly authorized read-only probes. Missing
 projects, private endpoints, or evidence remain blocked rather than passing.
+
+## Rust-first infrastructure tests
+
+Validation of `catalog/services.json` and Kubernetes source files now uses
+Rust instead of Python. Run `cargo test --manifest-path
+tools/infra-contract-check/Cargo.toml --all-targets`, followed by
+`./scripts/validate.sh`. See [docs/RUST_TESTS.md](docs/RUST_TESTS.md).
+The separate legacy Supabase/Neon Python contract check still requires a
+parity-proven Rust migration; do not add further Python scripts or tests.
